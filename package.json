@@ -1,0 +1,33 @@
+{
+  "name": "final-project-app",
+  "version": "0.0.0",
+    "private": true,
+    "scripts": {
+        "start": "node ./bin/www",
+        "start:dev": "nodemon ./bin/www"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/legiang1199/final-project-app.git"
+  },
+  "author": "legiang1199@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/legiang1199/final-project-app/issues"
+  },
+  "homepage": "https://github.com/legiang1199/final-project-app#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "dotenv": "^16.0.3",
+    "express": "~4.16.1",
+    "mongoose": "^6.9.2",
+    "morgan": "~1.9.1"
+  },
+  "devDependencies": {
+    "cors": "^2.8.5",
+    "nodemon": "^3.0.1"
+  }
+}
+
