@@ -2,7 +2,7 @@ const UserRepository = require('../Repository/UserRepository');
 
 const getAllUsers = async () => {
   try {
-    const users = await UserRepository.findAllUsers();
+    const users = await UserRepository.getAllUsers();
     return users;
   } catch (error) {}
 };
