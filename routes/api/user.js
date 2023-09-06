@@ -1,30 +1,30 @@
-var express = require('express');
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
 
 const {
   getUserById,
   patchEditUser,
   deleteUser,
-  getAllUser,
+  getAllUsers,
   uploadAvatar,
-} = require('../../controllers/UserController');
+} = require("../../controllers/userController");
 
 // const { avatarUploader } = require('../../middlewares/Uploader');
 // const { adminRole } = require('../../permission/author');
 
 //METHOD GET
 // router.get('/', adminRole, getAllUser);
-router.get('/', getAllUser);
+router.get("/", getAllUsers);
 
-router.get('/:userId', getUserById);
+router.get("/:userId", getUserById);
 
 //upload user images
-router.post('/avatar/:userId', uploadAvatar);
+router.post("/avatar/:userId", uploadAvatar);
 
 //METHOD PATCH
-router.patch('/:userId', patchEditUser);
+router.patch("/:userId", patchEditUser);
 
 //METHOD DELETE
-router.delete('/:userId', deleteUser);
+router.delete("/:userId", deleteUser);
 
 module.exports = router;
