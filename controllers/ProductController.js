@@ -64,6 +64,17 @@ const deleteProduct = async (req, res, next) => {
   }
 };
 
+const getProductByUserId = async (req, res, next) => {
+  try {
+    if (!req.params.userId)
+      return res.status(400).json({ message: "Not found ID!" });
+    const product = await ProductService.getProductByUserId(req.params.userId);
+    res.status(200).json(product);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+}
+
 module.exports = {
   getAllProducts,
   createProduct,
@@ -71,4 +82,5 @@ module.exports = {
   getAllProduct,
   patchEditProduct,
   deleteProduct,
+  getProductByUserId
 };

@@ -12,9 +12,11 @@ const auctionRoutes = require("./routes/api/auction");
 const cors = require("cors");
 const bidRoutes = require("./routes/api/bid");
 const {isLoggedIn} = require("./middlewares/authMiddleware");
+const { connectCloudinary } = require("./database/cloudinary");
 
-// const multer = require("multer");
-// const cloudinary = require("cloudinary").v2;
+
+
+
 
 
 
@@ -48,7 +50,7 @@ app.use("/api/bid", bidRoutes);
 
 //connect to database
 (async () => {
-  await connectDatabase();
+  await connectDatabase(),connectCloudinary();;
 })();
 
 module.exports = app;

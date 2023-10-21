@@ -27,12 +27,12 @@ const createBid = async (req, res) => {
         .json({ success: false, message: "The auction has ended." });
     }
 
-    if (data.bid_amount < auctionData.starting_price) {
+    if (data.bid_amount <= auctionData.starting_price) {
       return res
         .status(400)
         .json({
           success: false,
-          message: "Giá đặt giá không cao hơn giá cao nhất.",
+          message: "The bid price is not higher than the highest price.",
         });
     }
 
