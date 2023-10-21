@@ -1,4 +1,4 @@
-const AuctionRepository = require("../Repository/AuctionsRepository");
+const AuctionRepository = require("../Repositories/AuctionsRepository");
 
 const getAllAuctions = async () => {
   try {
@@ -17,7 +17,6 @@ const createAuction = async (auction) => {
     res.status(400).json(error);
   }
 };
-
 
 const getAuctionById = async (auctionId) => {
   try {
@@ -48,7 +47,6 @@ const deleteAuction = async (auctionId) => {
     res.status(400).json(error);
   }
 };
-
 
 module.exports = {
   getAllAuctions,

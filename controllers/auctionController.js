@@ -14,7 +14,7 @@ const createAuction = async (req, res) => {
   try {
     let data = req.body;
     const product = await Auction.findOne({ product: data.product });
-    if (product) return res.status(400).send('user already exist');
+    if (product) return res.status(400).send('Product already exist');
     const auction = await auctionService.createAuction(req.body);
     res.status(200).json(auction);
   } catch (error) {
