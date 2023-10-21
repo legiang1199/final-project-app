@@ -7,11 +7,14 @@ const {
   getProductById,
   patchEditProduct,
   deleteProduct,
+  getProductByUserId,
 } = require("../../controllers/ProductController");
 
 router.get("/", getAllProducts);
 
 router.get("/:productId", getProductById);
+
+
 
 router.post("/", createProduct);
 

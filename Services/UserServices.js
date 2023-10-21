@@ -1,4 +1,4 @@
-const UserRepository = require('../Repository/UserRepository');
+const UserRepository = require("../Repositories/UserRepository");
 
 const getAllUsers = async () => {
   try {

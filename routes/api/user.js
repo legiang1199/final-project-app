@@ -6,7 +6,7 @@ const {
   patchEditUser,
   deleteUser,
   getAllUsers,
-  uploadAvatar,
+
 } = require("../../controllers/userController");
 
 // const { avatarUploader } = require('../../middlewares/Uploader');
@@ -17,9 +17,6 @@ const {
 router.get("/", getAllUsers);
 
 router.get("/:userId", getUserById);
-
-//upload user images
-router.post("/avatar/:userId", uploadAvatar);
 
 //METHOD PATCH
 router.patch("/:userId", patchEditUser);
