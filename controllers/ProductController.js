@@ -14,7 +14,6 @@ const createProduct = async (req, res, next) => {
   try {
     if (!req.body) return res.sendStatus(400);
     const product = await ProductService.createProduct(req.body);
-
     res.status(200).json(product);
   } catch (error) {
     res.status(400).json({message: error.message});
