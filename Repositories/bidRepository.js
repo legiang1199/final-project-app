@@ -27,9 +27,10 @@ const getBidById = async (bidId) => {
     }
 }
 
+
 const getBidByUserId = async (userId) => {
     try {
-        const bid = await bidModel.find({userId: userId});
+        const bid = await bidModel.find({user: userId});
         return bid;
     } catch (error) {
         console.log(error);
@@ -38,7 +39,7 @@ const getBidByUserId = async (userId) => {
 
 const getBidByAuctionId = async (auctionId) => {
     try {
-        const bid = await bidModel.find({auctionId: auctionId});
+        const bid = await bidModel.find({auction: auctionId});
         return bid;
     } catch (error) {
         console.log(error);

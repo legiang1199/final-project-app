@@ -14,7 +14,7 @@ router.get("/", getAllProducts);
 
 router.get("/:productId", getProductById);
 
-
+router.get("/user/:userId", getProductByUserId);
 
 router.post("/", createProduct);
 

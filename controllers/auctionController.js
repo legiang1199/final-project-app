@@ -14,15 +14,14 @@ const createAuction = async (req, res) => {
   try {
     let data = req.body;
     const product = await Auction.findOne({ product: data.product });
-    if (product) return res.status(400).send('Product already exist');
+    if (product) return res.status(400).send("Product already exist");
+
     const auction = await auctionService.createAuction(req.body);
     res.status(200).json(auction);
   } catch (error) {
     res.status(400).json(error);
   }
 };
-
-
 
 const getAuctionById = async (req, res) => {
   try {
@@ -54,11 +53,10 @@ const deleteAuction = async (req, res) => {
   }
 };
 
-
 module.exports = {
   getAllAuctions,
   createAuction,
   getAuctionById,
   patchEditAuction,
-  deleteAuction
+  deleteAuction,
 };

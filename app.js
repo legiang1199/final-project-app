@@ -9,12 +9,15 @@ const authRouter = require("./routes/api/auth");
 const productRoutes = require("./routes/api/product");
 const categoryRoutes = require("./routes/api/category");
 const auctionRoutes = require("./routes/api/auction");
+const statsRoutes = require("./routes/api/stats");
 const cors = require("cors");
 const bidRoutes = require("./routes/api/bid");
 const {isLoggedIn} = require("./middlewares/authMiddleware");
+const { connectCloudinary } = require("./database/cloudinary");
 
-// const multer = require("multer");
-// const cloudinary = require("cloudinary").v2;
+
+
+
 
 
 
@@ -34,6 +37,7 @@ app.use("/api/product", productRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/auction", auctionRoutes);
 app.use("/api/bid", bidRoutes);
+app.use("/api/stats", statsRoutes);
 
 // const storage = multer.diskStorage({
 //   destination: function (req, file, cb) {
@@ -48,7 +52,7 @@ app.use("/api/bid", bidRoutes);
 
 //connect to database
 (async () => {
-  await connectDatabase();
+  await connectDatabase(),connectCloudinary();;
 })();
 
 module.exports = app;
