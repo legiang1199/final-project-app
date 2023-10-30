@@ -3,6 +3,7 @@ const { hashPassword, checkPassword } = require('../utils/bcrypt');
 const { createToken } = require('../utils/jwt.js');
 const { sendEmail } = require('../utils/sendEmail');
 
+
 const register = async (req, res, next) => {
   try {
     let data = req.body;
@@ -55,9 +56,9 @@ const login = async (req, res, next) => {
 
     if (!isValidPassword) return res.status(401).send('Password is not valid');
 
-    const { email: userEmail, role, fullname } = foundUser;
+    const {  id, email: userEmail, role, fullname } = foundUser;
 
-    const payload = { email: userEmail, role, fullname };
+    const payload = { id, email: userEmail, role, fullname };
 
     const token = await createToken(payload);
 
@@ -108,14 +109,7 @@ const changePassword = async (req, res, next) => {
   }
 };
 
-const logout = async (req, res, next) => {
-  try {
-    res.clearCookie('access_token');
-    res.status(200).json({ message: 'Logout successfully!' });
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
+
 
 module.exports = {
   register,
@@ -123,5 +117,5 @@ module.exports = {
   login,
   forgotPassword,
   changePassword,
-  logout,
+
 };

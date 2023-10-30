@@ -1,0 +1,47 @@
+const passport = require("passport");
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const express = require("express");
+const googleAuth = require("../../database/google-auth.dal");
+const router = express.Router();
+require("dotenv").config();
+
+router.get(
+  "/",
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+  })
+);
+
+router.get("/login/success", (req, res) => {
+  if (req.user) {
+    res.status(200).json({
+      error: false,
+      message: "Successfully Loged In",
+      user: req.user,
+    });
+  } else {
+    res.status(403).json({ error: true, message: "Not Authorized" });
+  }
+});
+
+router.get("/login/failed", (req, res) => {
+  res.status(401).json({
+    error: true,
+    message: "Log in failure",
+  });
+});
+
+router.get(
+  "/callback",
+  passport.authenticate("google", {
+    successRedirect: "http://localhost:5173/home",
+    failureRedirect: "/auth/google/login/failed",
+  })
+);
+
+router.get("/logout", (req, res) => {
+    req.logout();
+    res.redirect("/");
+});
+
+module.exports = router;
