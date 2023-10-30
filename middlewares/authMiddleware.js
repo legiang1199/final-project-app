@@ -8,9 +8,9 @@ const isLoggedIn = async (req, res, next) => {
 
     if (!token) return res.status(401).send('Unauthorized: No token provided');
 
-    const { email, role, fullname } = jwt.verify(token, process.env.SECRET_KEY);
+    const { id, email, role, fullname } = jwt.verify(token, process.env.SECRET_KEY);
 
-    req.user = { email, role, fullname };
+    req.user = { id, email, role, fullname };
 
     next();
   } catch (error) {
