@@ -46,12 +46,22 @@ const getBidByAuctionId = async (auctionId) => {
     }
 }
 
+const getLatestBidByAuctionId = async (auctionId) => {
+    try {
+        const bid = await bidModel.find({auction: auctionId}).sort({bid_time: -1}).limit(1);
+        return bid;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     getAllBids,
     createBid,
     getBidById,
     getBidByUserId,
-    getBidByAuctionId
+    getBidByAuctionId,
+    getLatestBidByAuctionId
 };
 
 

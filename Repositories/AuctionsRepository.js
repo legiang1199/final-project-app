@@ -1,4 +1,6 @@
 const AuctionsModel = require("../database/models/Auctions");
+const ProductModel = require("../database/models/Product");
+const UserModel = require("../database/models/User");
 
 const getAllAuctions = async () => {
   try {
@@ -40,9 +42,22 @@ const patchEditAuction = async (auctionId, auction) => {
   }
 };
 
+const getAuctionByUserId = async (userId) => {
+  try {
+    const auction = await AuctionsModel.find({ owner: userId });
+    return auction;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+
+
 module.exports = {
   getAllAuctions,
   createAuction,
   getAuctionById,
   patchEditAuction,
+  getAuctionByUserId,
 };

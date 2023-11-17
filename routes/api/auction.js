@@ -7,6 +7,10 @@ const {
   getAuctionById,
   patchEditAuction,
   deleteAuction,
+  getAuctionByUserId,
+  getWinnerAuction,
+  searchAuction,
+  
 } = require("../../controllers/auctionController");
 
 router.get("/", getAllAuctions);
@@ -19,6 +23,10 @@ router.patch("/:auctionId", patchEditAuction);
 
 router.delete("/:auctionId", deleteAuction);
 
+router.get("/user/:userId", getAuctionByUserId);
 
+router.get("/winner/:auctionId", getWinnerAuction);
+
+router.get("/search/:search", searchAuction);
 
 module.exports = router;

@@ -44,11 +44,19 @@ const getBidByAuctionId = async (auctionId) => {
         console.log(error);
     }
 }
-
+const getLatestBidByAuctionId = async (auctionId) => {
+    try {
+        const bid = await bidRepository.getLatestBidByAuctionId(auctionId);
+        return bid;
+    } catch (error) {
+        console.log(error);
+    }
+}
 module.exports = {
     getAllBids,
     createBid,
     getBidById,
     getBidByUserId,
-    getBidByAuctionId
+    getBidByAuctionId,
+    getLatestBidByAuctionId
 };

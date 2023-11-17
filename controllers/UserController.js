@@ -1,5 +1,5 @@
 const UserServices = require('../Services/UserServices');
-const { User } = require('../database/models/User');
+const  User  = require('../database/models/User');
 
 const getAllUsers = async (req, res, next) => {
   try {
@@ -35,7 +35,8 @@ const patchEditUser = async (req, res, next) => {
   try {
     const userUpdate = await User.findByIdAndUpdate(req.params.userId, req.body);
     res.status(200).json(userUpdate);
-  } catch (err) {
+    console.log(userUpdate);
+  } catch (error) {
     res.status(400).json({message: error.message});
   }
 };
@@ -44,7 +45,7 @@ const deleteUser = async (req, res, next) => {
   try {
     const deleteUserInfo = await User.findByIdAndDelete(req.params.userId);
     res.status(200).json(deleteUserInfo);
-  } catch (err) {
+  } catch (error) {
     res.status(400).json({message: error.message});
 
   }

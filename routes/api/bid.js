@@ -7,6 +7,7 @@ const {
     getBidById,
     getBidByUserId,
     getBidByAuctionId,
+    getLatestBidByAuctionId,
     } = require("../../controllers/bidcontroller");
 
 router.get("/", getAllBids);
@@ -18,5 +19,7 @@ router.get("/user/:userId", getBidByUserId);
 router.get("/auction/:auctionId", getBidByAuctionId);
 
 router.post("/", createBid);
+
+router.get("/auction/latest/:auctionId", getLatestBidByAuctionId);
 
 module.exports = router;
