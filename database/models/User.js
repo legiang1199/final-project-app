@@ -17,6 +17,8 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  phoneNumber: { type: String },
+  address: { type: String },
 },
 { timestamps: true }
 );

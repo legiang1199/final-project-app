@@ -48,10 +48,21 @@ const deleteAuction = async (auctionId) => {
   }
 };
 
+const getAuctionByUserId = async (userId) => {
+  try {
+    const auction = await AuctionRepository.getAuctionByUserId(userId);
+    return auction;
+  }
+  catch (error) {
+    res.status(400).json(error);
+  }
+};
+
 module.exports = {
   getAllAuctions,
   createAuction,
   getAuctionById,
   patchEditAuction,
   deleteAuction,
+  getAuctionByUserId,
 };

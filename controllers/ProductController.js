@@ -74,6 +74,8 @@ const getProductByUserId = async (req, res, next) => {
   }
 }
 
+
+
 module.exports = {
   getAllProducts,
   createProduct,

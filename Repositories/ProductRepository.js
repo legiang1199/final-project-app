@@ -31,7 +31,7 @@ const getProductById = async (productId) => {
 
 const getProductByUserId = async (userId) => {
     try {
-        const product = await ProductModel.find({userId: userId});
+        const product = await ProductModel.find({owner: userId});
         return product;
     } catch (error) {
         console.log(error);
