@@ -19,6 +19,12 @@ const session = require("express-session");
 const googleRoutes = require("./routes/api/google-auth");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const User = require("./database/models/User");
+const stripe= require("./routes/stripe");
+const bodyParser = require('body-parser');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./utils/swaggerSpec');
+
+
 
 const indexRouter = require("./routes/index");
 
@@ -28,6 +34,8 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 app.use(
   session({
@@ -50,6 +58,10 @@ passport.deserializeUser((id, done) => {
       done(null, user);
   })
 });
+
+
+
+
 
 passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
@@ -80,20 +92,14 @@ app.use("/api/auction", auctionRoutes);
 app.use("/api/bid", bidRoutes);
 app.use("/api/stats", statsRoutes);
 app.use('/auth/google', googleRoutes);
-// const storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, 'uploads/');
-//   },
-//   filename: async function (req, file, cb) {
-//     cb(null, file.originalname);
-//   }
-// });
+app.use('/stripe', stripe);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// const upload = multer({ storage: storage });
+
 
 //connect to database
 (async () => {
-  await connectDatabase(),connectCloudinary();;
+  await connectDatabase();
 })();
 
 module.exports = app;

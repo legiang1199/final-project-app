@@ -109,6 +109,16 @@ const changePassword = async (req, res, next) => {
   }
 };
 
+const logout = async (req, res, next) => {
+  try {
+    res.clearCookie('access_token');
+    res.send('Logged out');
+  } catch (error) {
+    res.status(400).send('An error occured');
+    console.log('🚀 ~ file: UserController.js:64 ~ login ~ error', error);
+  }
+}
+
 
 
 module.exports = {
@@ -117,5 +127,5 @@ module.exports = {
   login,
   forgotPassword,
   changePassword,
-
+logout
 };

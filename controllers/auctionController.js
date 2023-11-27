@@ -4,6 +4,8 @@ const Product = require("../database/models/Product");
 const bidService = require("../Services/bidService");
 const User = require("../database/models/User");
 const { sendEmail } = require("../utils/sendEmail");
+const Stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+require("dotenv").config();
 
 const getAllAuctions = async (req, res) => {
   try {
@@ -33,16 +35,42 @@ const getAuctionById = async (req, res) => {
     const lastBid = await bidService.getLatestBidByAuctionId(auction._id);
     auction.bids = lastBid;
     
+
     if (lastBid && auction.auction_end < Date.now()) {
-      const winner = await User.findById(lastBid[0].user); // Assuming there is a last bid
+      const winner = await User.findById(lastBid[0].user);
+    
       if (!auction.emailSent) {
+        auction.winner = winner;
+        // Create a Stripe checkout session
+        const session = await Stripe.checkout.sessions.create({
+          line_items: [
+            {
+              price_data: {
+                currency: "usd",
+                product_data: {
+                  name: "${auction.name} Auction Payment",
+                },
+                unit_amount: lastBid[0].bid_amount * 100, // Convert to cents
+              },
+              quantity: 1,
+            },
+          ],
+          payment_method_types: ["card"],
+          mode: "payment",
+          success_url: `${process.env.CLINT_URL}/success`,
+          cancel_url: `${process.env.CLINT_URL}/cancel`,
+        });
+
+        // Send the payment link to the winner via email
         const message = `You have been the winner on ${
           auction.name
-        }. The bid is ${lastBid[0].bid_amount.toString()} VND. Please go to ${
-          process.env.CLIENT_URL
-        } to complete the payment.`;
+        } Auction. The bid is ${lastBid[0].bid_amount.toString()} VND. Please go to the following link to complete the payment:${
+          session.url
+        }`;
+
         try {
           await sendEmail(winner.email, message);
+          // await savePaymentInfo(auction._id, winner._id, lastBid[0].bid_amount);
           auction.emailSent = true;
         } catch (error) {
           console.error("Error sending email:", error);
@@ -53,10 +81,10 @@ const getAuctionById = async (req, res) => {
     await auction.save();
     res.status(200).json(auction);
   } catch (error) {
+    console.error("Error:", error);
     res.status(400).json(error);
   }
 };
-
 
 const patchEditAuction = async (req, res) => {
   try {
@@ -134,6 +162,8 @@ const searchAuction = async (req, res) => {
     res.status(400).json(error);
   }
 };
+
+
 
 module.exports = {
   getAllAuctions,

@@ -1,5 +1,7 @@
 const ProductService = require("../Services/ProductServices");
 const { Product } = require("../database/models/Product");
+const { uploadPhoto } = require("../utils/upload");
+const connectCloudinary = require("../database/cloudinary");
 
 const getAllProducts = async (req, res, next) => {
   try {
@@ -11,14 +13,29 @@ const getAllProducts = async (req, res, next) => {
 };
 
 const createProduct = async (req, res, next) => {
+  const { imgUrl, ...productData } = req.body;
   try {
-    if (!req.body) return res.sendStatus(400);
-    const product = await ProductService.createProduct(req.body);
-    res.status(200).json(product);
+    if (imgUrl) {
+      const result = await connectCloudinary.uploader.upload(imgUrl, {
+        upload_preset: "auction_app",
+        width: 500,
+        height: 500,
+        crop: "fill",
+      });
+
+      if (result) {
+        const createdProduct = await ProductService.createProduct({
+          ...productData, // Use the destructured productData instead of product
+          imgUrl: result.secure_url,
+        });
+        res.status(200).json(createdProduct);
+      }
+    }
   } catch (error) {
-    res.status(400).json({message: error.message});
+    res.status(400).json({ message: error.message });
   }
 };
+
 
 const getProductById = async (req, res, next) => {
   try {
@@ -72,9 +89,7 @@ const getProductByUserId = async (req, res, next) => {
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
-}
-
-
+};
 
 module.exports = {
   getAllProducts,
@@ -83,5 +98,5 @@ module.exports = {
   getAllProduct,
   patchEditProduct,
   deleteProduct,
-  getProductByUserId
+  getProductByUserId,
 };
