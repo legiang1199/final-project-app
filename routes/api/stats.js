@@ -7,9 +7,21 @@ const Bid = require("../../database/models/bid");
 const Product = require("../../database/models/Product");
 const User = require("../../database/models/User");
 
-// @route   GET api/stats/auction
-// @desc    Get stats for auctions
-// @access  Private, admin only
+/**
+ * @swagger
+ * /api/stats/auction:
+ *  get:
+ *   summary: Get stats for auctions
+ *  description: Retrieve stats for auctions.
+ * responses:
+ *  '200':
+ *   description: A successful response with stats of auctions.
+ * '500':
+ *  description: Internal server error.
+ */
+
+ 
+
 router.get("/auction/:userId", async (req, res) => {
   try {
     const auctions = await Auction.find({ owner: req.params.userId });
@@ -35,6 +47,20 @@ router.get("/auction/:userId", async (req, res) => {
     res.status(500).send("Server Error");
   }
 });
+
+/** 
+ * @swagger
+ * /api/stats/auction:
+ * get:
+ * summary: Get stats for auctions
+ * description: Retrieve stats for auctions.
+ * responses:
+ * '200':
+ * description: A successful response with stats of auctions.
+ * '500':
+ * description: Internal server error.
+ */
+
 
 router.get("/auction", isLoggedIn, adminRole, async (req, res) => {
   try {
@@ -138,7 +164,7 @@ router.get("/user", isLoggedIn, adminRole, async (req, res) => {
   }
 });
 
-router.get("/all", isLoggedIn, adminRole, async (req, res) => {
+router.get("/all", async (req, res) => {
   try {
     const auctions = await Auction.find();
     const totalAuctions = auctions.length;

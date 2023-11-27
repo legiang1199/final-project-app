@@ -1,5 +1,5 @@
 const categoryServices = require('../Services/CategoryServices');
-const {category} = require('../database/models/Category');
+const category = require('../database/models/Category');
 
 const getAllCategories = async (req, res, next) => {
     try {

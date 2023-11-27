@@ -1,46 +1,14 @@
-const cloudinary = require('cloudinary').v2;
-const multer = require('multer');
-const { CloudinaryStorage } = require('multer-storage-cloudinary');
-
-// Configure Cloudinary
-cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET
-});
-
-// Configure Multer storage
-const storage = new CloudinaryStorage({
-    cloudinary: cloudinary,
-    params: {
-        folder: 'product-images',
-        allowed_formats: ['jpg', 'jpeg', 'png']
-    }
-});
-
-// Create Multer instance
-const upload = multer({ storage: storage });
-
-// Define controller function to handle image upload
-exports.uploadProductImage = upload.single('image');
-
-// Define controller function to create a new product
-exports.createProduct = async (req, res) => {
+const  connectCloudinary = require( "../database/cloudinary");
+//upload photo
+exports.uploadPhoto = async (req, res) => {
     try {
-        // Get the uploaded image URL from Cloudinary
-        const image = req.file.path;
-
-        // Create the new product with the image URL
-        const newProduct = await Product.create({
-            name: req.body.name,
-            description: req.body.description,
-            price: req.body.price,
-            image: image
+        const result = await connectCloudinary.uploader.upload(req.body.imgUrl, {
+            upload_preset: "auction_app",
+            allowed_formats: ["jpg", "png", "jpeg", "gif", "svg", "jfif", "webp"],
         });
-
-        res.status(201).json({ success: true, data: newProduct });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ success: false, error: 'Server error' });
+        req.body.imgUrl = result.secure_url;
+        res.status(200).json(req.body.avatar);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
     }
-};
+}
