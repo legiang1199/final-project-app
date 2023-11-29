@@ -33,51 +33,51 @@ const getAuctionById = async (req, res) => {
   try {
     const auction = await auctionService.getAuctionById(req.params.auctionId);
     const lastBid = await bidService.getLatestBidByAuctionId(auction._id);
-    auction.bids = lastBid;
-    
+    if (!lastBid) {
+      auction.bids = lastBid;
 
-    if (lastBid && auction.auction_end < Date.now()) {
-      const winner = await User.findById(lastBid[0].user);
-    
-      if (!auction.emailSent) {
-        auction.winner = winner;
-        // Create a Stripe checkout session
-        const session = await Stripe.checkout.sessions.create({
-          line_items: [
-            {
-              price_data: {
-                currency: "usd",
-                product_data: {
-                  name: "${auction.name} Auction Payment",
+      if (lastBid && auction.auction_end < Date.now()) {
+        const winner = await User.findById(lastBid[0].user);
+
+        if (!auction.emailSent) {
+          auction.winner = winner;
+          // Create a Stripe checkout session
+          const session = await Stripe.checkout.sessions.create({
+            line_items: [
+              {
+                price_data: {
+                  currency: "usd",
+                  product_data: {
+                    name: "${auction.name} Auction Payment",
+                  },
+                  unit_amount: lastBid[0].bid_amount * 100, // Convert to cents
                 },
-                unit_amount: lastBid[0].bid_amount * 100, // Convert to cents
+                quantity: 1,
               },
-              quantity: 1,
-            },
-          ],
-          payment_method_types: ["card"],
-          mode: "payment",
-          success_url: `${process.env.CLINT_URL}/success`,
-          cancel_url: `${process.env.CLINT_URL}/cancel`,
-        });
+            ],
+            payment_method_types: ["card"],
+            mode: "payment",
+            success_url: `${process.env.CLINT_URL}/success`,
+            cancel_url: `${process.env.CLINT_URL}/cancel`,
+          });
 
-        // Send the payment link to the winner via email
-        const message = `You have been the winner on ${
-          auction.name
-        } Auction. The bid is ${lastBid[0].bid_amount.toString()} VND. Please go to the following link to complete the payment:${
-          session.url
-        }`;
+          // Send the payment link to the winner via email
+          const message = `You have been the winner on ${
+            auction.name
+          } Auction. The bid is ${lastBid[0].bid_amount.toString()} VND. Please go to the following link to complete the payment:${
+            session.url
+          }`;
 
-        try {
-          await sendEmail(winner.email, message);
-          // await savePaymentInfo(auction._id, winner._id, lastBid[0].bid_amount);
-          auction.emailSent = true;
-        } catch (error) {
-          console.error("Error sending email:", error);
+          try {
+            await sendEmail(winner.email, message);
+            // await savePaymentInfo(auction._id, winner._id, lastBid[0].bid_amount);
+            auction.emailSent = true;
+          } catch (error) {
+            console.error("Error sending email:", error);
+          }
         }
       }
     }
-
     await auction.save();
     res.status(200).json(auction);
   } catch (error) {
@@ -162,8 +162,6 @@ const searchAuction = async (req, res) => {
     res.status(400).json(error);
   }
 };
-
-
 
 module.exports = {
   getAllAuctions,
