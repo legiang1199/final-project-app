@@ -35,7 +35,7 @@ const createBid = async (req, res) => {
       });
     }
 
-    if (auctionData.owner === data.user) {
+    if (auctionData.owner == data.user) {
       return res
         .status(400)
         .json({ success: false, message: "You cannot bid on your own item." });

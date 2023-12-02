@@ -33,7 +33,7 @@ const getAuctionById = async (req, res) => {
   try {
     const auction = await auctionService.getAuctionById(req.params.auctionId);
     const lastBid = await bidService.getLatestBidByAuctionId(auction._id);
-    if (!lastBid) {
+
       auction.bids = lastBid;
 
       if (lastBid && auction.auction_end < Date.now()) {
@@ -77,7 +77,7 @@ const getAuctionById = async (req, res) => {
           }
         }
       }
-    }
+    
     await auction.save();
     res.status(200).json(auction);
   } catch (error) {
